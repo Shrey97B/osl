@@ -67,4 +67,22 @@ else{
       
   }
   
+    $fildata = $fildata . "\n Details of " . $show_name . " ";
+  my @info = $tree->findnodes( '//div[@id="series_basic_info"]/ul[@class="list-group"]/li');
+
+  foreach $inf (@info){
+        
+        my $key =  $inf->findvalue('./strong');
+        my $val =  $inf->findvalue('./span');
+        
+        $fildata = $fildata . "\t" . $key . " : " . $val . "\n";
+  }
+  
+  print $fildata;
+  my $filename = 'Description.txt';
+  open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
+  print $fh $fildata;
+  close $fh;
+  system("notepad.exe Description.txt");
+  
   }
