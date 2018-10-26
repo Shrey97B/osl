@@ -37,3 +37,31 @@ class datfet:
         price_data = [data[i][4] for i in range(len(data))]
         cls.store(symbol,date_data[len(data)-1])
         return date_data,price_data
+    
+       @classmethod
+    def store(cls,symbol,cur_date):
+        connect()
+        cur_date = str(cur_date)
+        cur_date = cur_date[:10]
+        print(cur_date)
+        try:
+            query="INSERT INTO record VALUES(:value1,to_date(:value2,'YYYY-MM-DD'))"
+            cursor.execute(query,(symbol,cur_date))
+        except Exception as e:
+            print(e)
+        connection.commit()
+        connection.close()
+
+    @classmethod
+    def finter(cls,symbol,datlist):
+        connect()
+        try:
+            selq = "select searchdate from record where symbol=:value1 and searchdate between to_date(:value2,'YYYY-MM-DD') and to_date(:value3,'YYYY-MM-DD') order by  searchdate"
+            cursor.execute(selq,(symbol,datlist[0],datlist[len(datlist)-1]))
+            res = cursor.fetchall()
+           
+        except Exception as e:
+            print(e)
+        connection.commit()
+        connection.close()
+        return res
